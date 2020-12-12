@@ -1,15 +1,20 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+require("dotenv").config();
+
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const MongoStore = require("connect-mongo")(session);
+// const MongoStore = require("connect-mongo")(session);
 const cors = require("cors");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const Movie = require('./models/movies')
+const data = require('./data.json')
+
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -20,9 +25,22 @@ mongoose
   .then(() => console.log(`Connected to database`))
   .catch((err) => console.error(err));
 
-var app = express();
+// Function to create de DB for the first time, no need to uncomment again
+// (async () => {
+//   try {
+//     const movies = await Movie.insertMany(data);
+//     movies.forEach((element) => {
+//       console.log(element.title);
+//     });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// })();
+
+const app = express();
 
 // CORS MIDDLEWARE SETUP
+/*
 app.use(
   cors({
     credentials: true,
@@ -33,6 +51,7 @@ app.use(
     ],
   })
 );
+*/
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
